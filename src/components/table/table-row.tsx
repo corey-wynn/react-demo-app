@@ -12,7 +12,7 @@ export function TableRowComponent(props: { row: TableRow }) {
     return (
         <div onClick={handleClick} className={classes}>
             {row.items.map((item, index) => (
-                <div key={`${item.value}-${index}`} style={{ width: item.width }}>{item.value}</div>
+                <div key={`${item.value}-${index}`} style={{ width: item.width }} className={styles().rowItem}>{item.value}</div>
             ))}
         </div>
     );
@@ -33,5 +33,8 @@ const styles = createUseStyles({
         '&:hover': {
             background: '#e9e9e9'
         }
+    },
+    rowItem: {
+        fontSize: '14px'
     }
 })

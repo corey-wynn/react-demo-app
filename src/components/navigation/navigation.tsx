@@ -32,7 +32,7 @@ const styles = createUseStyles({
         alignItems: 'center',
         width:'100%',
         height: '100%',
-        overflow: 'scroll',
-        background: '#e9e9e9'
+        padding: '15px',
+        overflow: 'scroll'
     }
 })

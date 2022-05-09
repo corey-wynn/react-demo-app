@@ -3,7 +3,7 @@ import { Employee } from "../models/employee.model";
 import { AppRoutes } from "../models/routes";
 import { makeCall } from "./http.service"
 
-export const gettUsers = async (): Promise<any> => {
+export const getEmployees = async (): Promise<any> => {
     const companies: Map<string, Company> = await makeCall('companies');
     const employees: Map<string, Employee> = await makeCall(AppRoutes.Employees);
     Array.from(employees.values()).map(e => {

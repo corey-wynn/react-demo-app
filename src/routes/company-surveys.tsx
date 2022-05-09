@@ -1,24 +1,39 @@
-import { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { Company } from "../models/company.model";
-import { SurveyResponse } from "../models/survey-responses.model";
 import { getCompany } from "../services/companies.service";
 import { getResponsesForSurvey } from "../services/responses.service";
 import { getSurveysByCompany } from "../services/surveys.service";
 import Chart from "../components/chart/chart";
-import { getColumnChartOptions } from "../models/chart.model";
+import { getPieChartOptions, PieChartSeries } from "../models/chart.model";
+import { AppRoutes } from "../models/routes";
+import { mapValuesToArray } from "../utils/utils";
+import { Survey } from "../models/survey.model";
+import ErrorComponent from "../components/error/errors";
+import { appIsLoading } from "../services/loading.service";
 
 export default function CompanySurveys() {
+    const navigate = useNavigate();
     let { companyId } = useParams();
+    let companySurveys: Map<string, Survey> = new Map();
     const [isError, setIsError] = useState<boolean>(false);
     const [chartOptions, setChartOptions] = useState<any>(null);
-    const companySurveys = useRef(new Map());
     const [company, setCompany] = useState<Company>(null);
+    const errorMessage: string = 'Error loading company survey chart';
 
     useEffect(() => {
         const fetchData = async () => {
-            const company = companyId ? await getCompany(companyId) : null;
-            if (company) setupData(company);
+            try {
+                appIsLoading.next(true);
+                const company = companyId ? await getCompany(companyId) : null;
+                if (!company) throw new Error('cannot find company');
+                setupData(company);
+            } catch (e) {
+                console.error(e);
+                setIsError(true);
+            } finally {
+                appIsLoading.next(false);
+            }
         }
 
         fetchData();
@@ -26,27 +41,36 @@ export default function CompanySurveys() {
 
     const setupData = async (company: Company) => {
         try {
-            companySurveys.current = await getSurveysByCompany(company.id);
-            const responsesBySurvey: Map<string, Map<string, SurveyResponse>> = new Map();
-            await Promise.all(Array.from(companySurveys.current.values()).map(async s => {
+            companySurveys = await getSurveysByCompany(company.id);
+            const responsesBySurvey: Map<string, Map<any, any>> = new Map();
+            await Promise.all(Array.from(companySurveys.values()).map(async s => {
                 const responses = await getResponsesForSurvey(s.id);
-                responsesBySurvey.set(s.id, responses)
+
+                mapValuesToArray(responses).forEach(r => {
+                    const exists = responsesBySurvey.get(s.id);
+                    if (!!exists) {
+                        exists.set(r.employee_id, r.employee_id)
+                    } else {
+                        const employeeMap = new Map([[r.employee_id, r.employee_id]]);
+                        responsesBySurvey.set(s.id, employeeMap);
+                    }
+                })
             }));
-            if (company) setupChartData(responsesBySurvey, company);
+
+            setupChartData(responsesBySurvey, company);
         } catch (e) {
             console.error(e);
             setIsError(true);
         }
     };
 
-    const setupChartData = (responsesBySurvey: Map<string, Map<string, SurveyResponse>>, company: Company) => {
-        const surveyCounts = [];
+    const setupChartData = (responsesBySurvey: Map<string, Map<string, string>>, company: Company) => {
+        const surveyCounts: PieChartSeries[] = [];
         Array.from(responsesBySurvey).forEach(entries => {
             const [id, value] = entries;
-            surveyCounts.push({ name: companySurveys.current.get(id).name, data: [value.size] });
+            surveyCounts.push({ name: companySurveys.get(id).name, key: id, y: value.size });
         });
-        let options = getColumnChartOptions([company.name], surveyCounts, 'Responses', 'Surveys');
-        options = addCustomOptions(options);
+        const options: Highcharts.Options = addCustomOptions(getPieChartOptions('Surveys', surveyCounts));
         setCompany(company);
         setChartOptions(options);
     };
@@ -58,24 +82,28 @@ export default function CompanySurveys() {
                 return `${this.series.name} has ${this.y} responses`;
             }
         };
-        options.plotOptions.series = {
-            cursor: 'pointer',
-            point: {
-                events: {
-                    click: function () {
-                        console.log('go to break down pie chart')
+        options.plotOptions = {
+            ...options.plotOptions,
+            series: {
+                point: {
+                    events: {
+                        click: (e) => {
+                        const surveyKey: string = e?.point?.key;
+                        if (!surveyKey) return;
+
+                        navigate(`/${AppRoutes.Responses}/${surveyKey}`);
+                        }
                     }
                 }
             }
         }
 
-        console.log('BAMF - options', options);
         return options;
     };
 
     return (
         <>
-        {isError && <p>Error</p>}
+        {isError && <ErrorComponent message={errorMessage} />}
 
         {!isError && chartOptions &&
             <Chart

@@ -20,7 +20,6 @@ const styles = createUseStyles({
     tableContainer: {
         width:'100%',
         height: '100%',
-        padding: '0 15px 15px 15px',
         overflow: 'auto'
     },
     tableHeaderContainer: {

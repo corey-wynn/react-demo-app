@@ -20,10 +20,10 @@ const styles = createUseStyles({
         width: '100%',
         display: 'flex',
         flexFlow: 'row nowrap',
-        padding: '15px'
+        padding: '0 15px 15px'
     },
     columnHeader: {
-        fontSize: '18px',
+        fontSize: '16px',
         textTransform: 'uppercase',
         fontWeight: 600
     }

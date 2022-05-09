@@ -29,52 +29,34 @@ p {
 }
 
 .nav-container {
-  width: 300px;
+  width: 200px;
   height: 100%;
   border-right: 1px solid black;
 }
 
 .main-container {
+  position: relative;
   display: flex;
   flex: 1;
   height: 100%;
+  padding: 30px;
 }
 
 .App {
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.loading-icon {
+  font-size: 50px;
+  animation: loader 1.2s linear infinite;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
+@keyframes loader {
+  0% {
     transform: rotate(0deg);
   }
-  to {
+  100% {
     transform: rotate(360deg);
   }
 }
+

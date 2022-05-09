@@ -2,14 +2,14 @@ import { useEffect, useState } from "react";
 import TableComponent from "../components/table/table";
 import { TableColumn, TableConfig, TableRow } from "../components/table/table.model";
 import { Employee } from "../models/employee.model";
-import { gettUsers } from "../services/employees.service";
+import { getEmployees } from "../services/employees.service";
 
 export default function Users() {
     const [tableConfig, setTableConfig] = useState<TableConfig>();
 
     useEffect(() => {
         const fetchData = async () => {
-            const data: Map<string, Employee> = await gettUsers();
+            const data: Map<string, Employee> = await getEmployees();
             setupTable(data);
         }
 
