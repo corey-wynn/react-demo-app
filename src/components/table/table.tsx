@@ -4,12 +4,13 @@ import { TableRowComponent } from "./table-row";
 import { TableConfig } from "./table.model";
 
 export default function TableComponent(props: TableConfig) {
+    const classes = styles();
     return (
-        <div className={styles().tableContainer}>
-            <div className={styles().tableHeaderContainer}>
+        <div className={classes.tableContainer}>
+            <div className={classes.tableHeaderContainer}>
                 <TableHeaderComponent columns={props.columns} />
             </div>
-            <div className={styles().tableRowsContainer}>
+            <div className={classes.tableRowsContainer}>
                 {props.rows.map(r => (<TableRowComponent key={r.key} row={r} />))}
             </div>
         </div>

@@ -1,19 +1,37 @@
-import { TableRow } from "./table.model";
-import {createUseStyles} from 'react-jss'
+import { TableRow, TableRowAction } from './table.model';
+import { createUseStyles } from 'react-jss';
+import { TableRowItemComponent  } from './table-row-item';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export function TableRowComponent(props: { row: TableRow }) {
+    const classes = styles();
     const { row } = props;
-    const classes: string =  `${styles().tableRow} ${row.click && styles().actionable}`
-    const handleClick = (): void => {
+    const handleRowClick = (row: TableRow): void => {
         if (!row.click) return;
         row.click(row);
     };
+    const rowAction = (e, row: TableRow, rowAction: TableRowAction) => {
+        e.stopPropagation();
+        rowAction.action(row)
+    };
+
+    const renderRowAction = (a: TableRowAction, row: TableRow, index: number) => (
+        <div key={`${row.key}-${index}-action`} onClick={(e) => rowAction(e, row, a)} className={classes.rowAction}>
+            <FontAwesomeIcon color={'#2b2e33'} icon={a.icon} />
+        </div>
+    );
 
     return (
-        <div onClick={handleClick} className={classes}>
+        <div onClick={() => handleRowClick(row)} className={`${classes.tableRow} ${row.click && classes.actionable}`}>
             {row.items.map((item, index) => (
-                <div key={`${item.value}-${index}`} style={{ width: item.width }} className={styles().rowItem}>{item.value}</div>
-            ))}
+                <TableRowItemComponent key={`${item.value}-${index}`} item={item} />)
+            )}
+
+            {row.actions?.length > 0 &&
+                <div className={styles().rowActions}>
+                    {row.actions.map((a, index) => (renderRowAction(a, row, index)))}
+                </div>
+            }
         </div>
     );
 }
@@ -25,7 +43,7 @@ const styles = createUseStyles({
         width:'100%',
         padding: '15px',
         marginBottom: '15px',
-        border: '1px solid black',
+        border: '1px solid #2b2e33',
         borderRadius: '5px',
     },
     actionable: {
@@ -36,5 +54,15 @@ const styles = createUseStyles({
     },
     rowItem: {
         fontSize: '14px'
+    },
+    rowActions: {
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: 'auto'
+    },
+    rowAction: {
+        padding: '0px 5px',
+        cursor: 'pointer',
+        color: '#2b2e33'
     }
 })

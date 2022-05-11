@@ -3,17 +3,17 @@ import { NavLink } from "react-router-dom";
 import { AppRouteToIcon } from "../../models/routes";
 import { NavigationItem } from "./navigation.model";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import classNames from 'classnames';
 
 export default function NavigationItemComponent(props: NavigationItem) {
+    const classes = styles();
     const iconName = AppRouteToIcon[props.route];
     return (
         <NavLink
-            className={({ isActive }) => (isActive ? styles().active : styles().navItem)}
+            className={({ isActive }) => (`${classes.navItem} ${isActive && classes.active}`)}
             to={`/${props.route}`}
         >   
             {AppRouteToIcon[props.route] 
-                && <FontAwesomeIcon className={classNames(styles().navIcon)} icon={`${iconName}`} />}
+                && <FontAwesomeIcon className={classes.navIcon} icon={`${iconName}`} />}
             {props.name}
         </NavLink>
     );
@@ -33,11 +33,9 @@ const styles = createUseStyles({
         width: '20px'
     },
     active: {
-        display: 'block',
-        width: '100%',
-        padding: '15px',
-        fontSize: '14px',
-        color: '#000000',
-        fontWeight: 600
+        color: '#2b2e33',
+        fontWeight: 600,
+        background: '#e9e9e9',
+        borderRadius: '5px'
     }
 })

@@ -1,10 +1,12 @@
 import { createUseStyles } from "react-jss";
 
-export default function ChartTitle(props: { title: string}) {
+export default function ChartTitleComponent(props: { title: string}) {
+    const classes = styles();
     const { title } = props;
+    
     return (
         <>
-            {title && <p className={styles().title}>{title}</p>}
+            {title && <p className={classes.title}>{title}</p>}
         </>
     );
 }

@@ -1,22 +1,24 @@
 import './index.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Users from './routes/employees';
-import Companies from './routes/companies';
-import NavigationBar from './components/navigation/navigation';
+import EmployeesComponent from './routes/employees';
+import CompaniesComponent from './routes/companies';
+import NavigationComponent from './components/navigation/navigation';
 import { AppRoutes } from './models/routes';
 import './App.css';
-import CompanySurveys from './routes/company-surveys';
-import SurveyResponses from './routes/survey-responses';
+import CompanySurveysComponent from './routes/company-surveys';
+import SurveyResponsesComponent from './routes/survey-responses';
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faHouse, faUsers, faBuilding, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faHouse, faUsers, faBuilding, faSpinner, faPieChart, faCircleInfo, faMessage } from '@fortawesome/free-solid-svg-icons';
 import { appIsLoading } from './services/loading.service';
 import { useState } from 'react';
 import LoadingComponent from './components/loading/loading';
+import EmployeeComponent from './routes/employee-info';
+import CompanyComponent from './routes/company-info';
 
 
 
 function App() {
-    library.add(faHouse, faUsers, faBuilding, faSpinner);
+    library.add(faHouse, faUsers, faBuilding, faSpinner, faPieChart, faCircleInfo, faMessage);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     appIsLoading.subscribe(loading => setIsLoading(loading));
 
@@ -26,16 +28,17 @@ function App() {
                 {isLoading && <LoadingComponent />}
                 
                 <div className="nav-container">
-                    <NavigationBar />
+                    <NavigationComponent />
                 </div>
 
                 <div className="main-container">
                     <Routes>
-                        <Route path={AppRoutes.Login} element={<App />} />
-                        <Route path={AppRoutes.Employees} element={<Users />} />
-                        <Route path={AppRoutes.Companies} element={<Companies />} />
-                        <Route path={`${AppRoutes.Companies}/:companyId`} element={<CompanySurveys />} />
-                        <Route path={`${AppRoutes.Responses}/:surveyId`} element={<SurveyResponses />} />
+                        <Route path={AppRoutes.Employees} element={<EmployeesComponent />} />
+                        <Route path={`${AppRoutes.Employee}/:employeeId`} element={<EmployeeComponent />} />
+                        <Route path={AppRoutes.Companies} element={<CompaniesComponent />} />
+                        <Route path={`${AppRoutes.Companies}/:companyId`} element={<CompanyComponent />} />
+                        <Route path={`${AppRoutes.Companies}/:companyId/${AppRoutes.Surveys}`} element={<CompanySurveysComponent />} />
+                        <Route path={`${AppRoutes.Responses}/:surveyId`} element={<SurveyResponsesComponent />} />
                     </Routes>
                 </div>
             </div>

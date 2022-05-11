@@ -1,4 +1,5 @@
 import { Company } from "./company.model";
+import { Department } from "./department.model";
 
 export interface Employee {
     id: string;
@@ -7,4 +8,5 @@ export interface Employee {
     manager_id: string;
     name: string;
     company: Company;
+    department: Department;
 }

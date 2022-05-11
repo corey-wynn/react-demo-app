@@ -1,21 +1,22 @@
 import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { createUseStyles } from 'react-jss';
-import ChartTitle from './chart-title';
+import ChartTitleComponent from './chart-title';
 
 export interface ChartProps {
     title: string;
     options: any;
 }
 
-export default function Chart(props: ChartProps) {
+export default function ChartComponent(props: ChartProps) {
+    const classes = styles();
     const { options, title } = props;
 
     return (
-        <div className={styles().wrapper}>
-            <ChartTitle title={title} />
+        <div className={classes.wrapper}>
+            <ChartTitleComponent title={title} />
 
-            <div className={styles().chartContainer}>
+            <div className={classes.chartContainer}>
                 <HighchartsReact
                     highcharts={Highcharts}
                     options={options}

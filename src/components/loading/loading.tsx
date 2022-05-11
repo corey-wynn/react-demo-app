@@ -2,9 +2,10 @@ import { createUseStyles } from "react-jss";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default function LoadingComponent() {
+    const classes = styles();
     return (
         <>
-            <div className={styles().loadingContainer}>
+            <div className={classes.loadingContainer}>
                 <FontAwesomeIcon className={'loading-icon'} icon={'spinner'} />
             </div>
         </>

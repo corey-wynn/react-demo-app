@@ -1,11 +1,13 @@
 import { IconName } from '@fortawesome/fontawesome-common-types';
 
 export enum AppRoutes {
-    Login = 'login',
-    Home = '',
-    Employees = 'employees',
     Companies = 'companies',
-    Responses = 'responses'
+    Employees = 'employees',
+    Employee = 'employee',
+    Home = '',
+    Login = 'login',
+    Responses = 'responses',
+    Surveys = 'surveys'
 }
 
 export const AppRouteToIcon: {[key in AppRoutes]?: IconName} = {

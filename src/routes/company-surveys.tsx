@@ -4,7 +4,7 @@ import { Company } from "../models/company.model";
 import { getCompany } from "../services/companies.service";
 import { getResponsesForSurvey } from "../services/responses.service";
 import { getSurveysByCompany } from "../services/surveys.service";
-import Chart from "../components/chart/chart";
+import ChartComponent from "../components/chart/chart";
 import { getPieChartOptions, PieChartSeries } from "../models/chart.model";
 import { AppRoutes } from "../models/routes";
 import { mapValuesToArray } from "../utils/utils";
@@ -12,7 +12,7 @@ import { Survey } from "../models/survey.model";
 import ErrorComponent from "../components/error/errors";
 import { appIsLoading } from "../services/loading.service";
 
-export default function CompanySurveys() {
+export default function CompanySurveysComponent() {
     const navigate = useNavigate();
     let { companyId } = useParams();
     let companySurveys: Map<string, Survey> = new Map();
@@ -26,7 +26,7 @@ export default function CompanySurveys() {
             try {
                 appIsLoading.next(true);
                 const company = companyId ? await getCompany(companyId) : null;
-                if (!company) throw new Error('cannot find company');
+                if (!company) throw new Error();
                 setupData(company);
             } catch (e) {
                 console.error(e);
@@ -106,7 +106,7 @@ export default function CompanySurveys() {
         {isError && <ErrorComponent message={errorMessage} />}
 
         {!isError && chartOptions &&
-            <Chart
+            <ChartComponent
                 title={`${company.name} - Survey`}
                 options={chartOptions}
             />

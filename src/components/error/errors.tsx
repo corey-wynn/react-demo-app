@@ -1,10 +1,12 @@
 import { createUseStyles } from "react-jss";
 
 export default function ErrorComponent(props: { message: string}) {
+    const classes = styles();
+
     return (
         <>
-            <div className={styles().loadingContainer}>
-                <p className={styles().errorText}>{props.message ? props.message : 'Error'}</p>
+            <div className={classes.loadingContainer}>
+                <p className={classes.errorText}>{props.message ? props.message : 'Error'}</p>
             </div>
         </>
     );

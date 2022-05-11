@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import Chart from "../components/chart/chart";
+import ChartComponent from "../components/chart/chart";
 import ErrorComponent from "../components/error/errors";
 import { ColumnChartSeries, getColumnChartOptions } from "../models/chart.model";
 import { Question } from "../models/question.model";
@@ -12,7 +12,7 @@ import { getResponsesForSurvey } from "../services/responses.service";
 import { getSurvey } from "../services/surveys.service";
 import { mapValuesToArray } from "../utils/utils";
 
-export default function SurveyResponses() {
+export default function SurveyResponsesComponent() {
     let { surveyId } = useParams();
     const [isError, setIsError] = useState<boolean>(false);
     const [chartOptions, setChartOptions] = useState<any>(null);
@@ -84,7 +84,7 @@ export default function SurveyResponses() {
             {isError && <ErrorComponent message={errorMessage} />}
 
             {!isError && chartOptions && survey &&
-                <Chart
+                <ChartComponent
                     title={`${survey.name}`}
                     options={chartOptions}
                 />

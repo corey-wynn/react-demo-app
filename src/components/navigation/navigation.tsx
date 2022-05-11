@@ -1,25 +1,24 @@
 import { createUseStyles } from "react-jss";
 import { AppRoutes } from "../../models/routes";
+import { LoggedInUserComponent } from "../logged-in-user/logged-in-user";
 import NavigationItemComponent from "./navigation-item";
 import { NavigationItem } from "./navigation.model";
 
-export default function NavigationBar() {
+export default function NavigationComponent() {
+    const classes = styles();
     const navItems: NavigationItem[] = [
         {
-            name: 'Home',
-            route: AppRoutes.Home,
+            name: 'Companies',
+            route: AppRoutes.Companies,
         },
         {
             name: 'Employees',
             route: AppRoutes.Employees,
-        },
-        {
-            name: 'Companies',
-            route: AppRoutes.Companies,
         }
     ]
     return (
-        <div className={styles().navContainer}>
+        <div className={classes.navContainer}>
+            <LoggedInUserComponent />
             {navItems.map((navItem, index) => <NavigationItemComponent key={index} route={navItem.route} name={navItem.name} />)}
         </div>
     );
